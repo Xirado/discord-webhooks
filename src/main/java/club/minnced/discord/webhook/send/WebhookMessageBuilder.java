@@ -50,7 +50,7 @@ public class WebhookMessageBuilder {
     protected final List<WebhookEmbed> embeds = new LinkedList<>();
     protected final MessageAttachment[] files = new MessageAttachment[WebhookMessage.MAX_FILES];
     protected AllowedMentions allowedMentions = AllowedMentions.all();
-    protected String username, avatarUrl;
+    protected String username, avatarUrl, threadName;
     protected boolean isTTS;
     protected int flags;
     private int fileIndex = 0;
@@ -86,6 +86,7 @@ public class WebhookMessageBuilder {
         username = null;
         avatarUrl = null;
         isTTS = false;
+        threadName = null;
         return this;
     }
 
@@ -201,6 +202,12 @@ public class WebhookMessageBuilder {
         this.content.setLength(0);
         if (content != null && !content.isEmpty())
             this.content.append(content);
+        return this;
+    }
+
+    @NotNull
+    public WebhookMessageBuilder setThreadName(@NotNull String threadName) {
+        this.threadName = threadName;
         return this;
     }
 
@@ -410,7 +417,7 @@ public class WebhookMessageBuilder {
         if (isEmpty())
             throw new IllegalStateException("Cannot build an empty message!");
         return new WebhookMessage(username, avatarUrl, content.toString(), embeds, isTTS,
-                fileIndex == 0 ? null : Arrays.copyOf(files, fileIndex), allowedMentions, flags);
+                fileIndex == 0 ? null : Arrays.copyOf(files, fileIndex), allowedMentions, flags, threadName);
     }
 
 
